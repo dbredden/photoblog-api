@@ -1,0 +1,12 @@
+version: '3.9'
+services:
+  photoblog-api:
+    image: photoblog-api
+    build:
+      context: .
+      dockerfile: PhotoBlog.API/Dockerfile
+    ports:
+      - "5000:80"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    depends_on: []
