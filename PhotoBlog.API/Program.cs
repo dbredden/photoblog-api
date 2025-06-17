@@ -1,7 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using PhotoBlog.API.Routes;
+using PhotoBlog.Application.Interfaces;
 using PhotoBlog.Database;
+using PhotoBlog.Infrastructure.Repositories;
 using PhotoBlog.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<PostDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<BlobStorageService, BlobStorageService>();
+builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
+builder.Services.AddScoped<IPostRepository, PostRepository>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
-using PhotoBlog.Application.Interfacecs;
+using PhotoBlog.Application.Interfaces;
 using PhotoBlog.Domain.Entities;
 
 
@@ -17,22 +17,24 @@ public class CreatePostCommand : IRequest<Guid>
 public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, Guid>
 {
     private readonly IBlobStorageService _blobService;
+    private readonly IPostRepository _repository;
 
-    public CreatePostCommandHandler(IBlobStorageService blobService)
+    public CreatePostCommandHandler(IBlobStorageService blobService, IPostRepository repository)
     {
         _blobService = blobService;
+        _repository = repository;
     }
 
     public async Task<Guid> Handle(CreatePostCommand request, CancellationToken cancellationToken)
     {
-        var urls = await _blobService.UploadOriginalAsync(request.Image);
+        var urls = await _blobService.UploadAndProcessImageAsync(request.Image);
 
         var post = new PostEntity
         {
             Id = Guid.NewGuid(),
-            PhotoOriginalUrl = urls.Original,
-            //PhotoWebUrl = urls.Web,
-            //PhotoThumbnailUrl = urls.Thumbnail,
+            PhotoOriginalUrl = urls.OriginalUrl,
+            PhotoWebUrl = urls.WebUrl,
+            PhotoThumbnailUrl = urls.ThumbnailUrl,
             Location = request.Location,
             Description = request.Description,
             Date = request.Date

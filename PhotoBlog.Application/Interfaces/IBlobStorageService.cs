@@ -1,10 +1,10 @@
-﻿
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using PhotoBlog.Application.DTOs;
 
-namespace PhotoBlog.Application.Interfacecs;
+namespace PhotoBlog.Application.Interfaces;
 
 public interface IBlobStorageService
 {
-    Task<string> UploadOriginalAsync(IFormFile file);
+    Task<UploadedImageUrls> UploadAndProcessImageAsync(IFormFile file);
 
 }

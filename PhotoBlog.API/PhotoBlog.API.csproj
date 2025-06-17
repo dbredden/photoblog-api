@@ -26,6 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PhotoBlog.Application\PhotoBlog.Application.csproj" />
     <ProjectReference Include="..\PhotoBlog.Database\PhotoBlog.Database.csproj" />
+    <ProjectReference Include="..\PhotoBlog.Infrastructure\PhotoBlog.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
