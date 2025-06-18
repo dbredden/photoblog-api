@@ -37,7 +37,7 @@ public class CreatePostCommandHandler : IRequestHandler<CreatePostCommand, Guid>
             PhotoThumbnailUrl = urls.ThumbnailUrl,
             Location = request.Location,
             Description = request.Description,
-            Date = request.Date
+            Date = DateTime.SpecifyKind(request.Date, DateTimeKind.Utc)
         };
 
         await _repository.AddAsync(post);

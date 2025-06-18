@@ -1,6 +1,7 @@
 ﻿using MediatR;
-using PhotoBlog.Application.Commands;
 using Microsoft.AspNetCore.Mvc;
+using PhotoBlog.Application.Commands;
+using System.Globalization;
 
 
 namespace PhotoBlog.API.Routes;
@@ -17,7 +18,7 @@ public static class Posts
             var image = form.Files.GetFile("image");
             var location = form["location"];
             var description = form["description"];
-            var date = DateTime.Parse(form["date"]);
+            var date = DateTime.ParseExact(form["date"], "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
             var command = new CreatePostCommand
             {
@@ -30,7 +31,9 @@ public static class Posts
             var postId = await mediator.Send(command);
 
             return Results.Created($"/api/posts/{postId}", new { postId });
+            
         });
+        return app;
 
     }
 
