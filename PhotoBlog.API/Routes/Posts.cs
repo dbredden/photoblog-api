@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PhotoBlog.Application.Commands;
+using PhotoBlog.Application.Queries;
 using System.Globalization;
 
 
@@ -10,9 +11,7 @@ public static class Posts
 {
     public static IEndpointRouteBuilder MapPosts(this IEndpointRouteBuilder app)
     {
-        app.MapPost("/api/posts", async (
-            HttpRequest request,
-            [FromServices] ISender mediator) =>
+        app.MapPost("/api/posts", async (HttpRequest request, [FromServices] ISender mediator) =>
         {
             var form = await request.ReadFormAsync();
             var image = form.Files.GetFile("image");
@@ -33,8 +32,14 @@ public static class Posts
             return Results.Created($"/api/posts/{postId}", new { postId });
             
         });
-        return app;
 
+        app.MapGet("/api/posts", async ([FromServices] ISender mediator) =>
+        {
+            var posts = await mediator.Send(new GetAllPostsQuery());
+            return Results.Ok(posts);
+        });
+
+        return app;
     }
 
 }
