@@ -39,6 +39,13 @@ public static class Posts
             return Results.Ok(posts);
         });
 
+
+        app.MapGet("api/posts/{id}", async ([FromServices] ISender mediator) =>
+        {
+            var posts = await mediator.Send(new GetPostByIdQuery());
+            return Results.Ok(posts);
+        });
+
         return app;
     }
 
