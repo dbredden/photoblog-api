@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PhotoBlog.Application.Commands;
+using PhotoBlog.Application.Common.DTOs;
 using PhotoBlog.Application.Queries;
 using PhotoBlog.Domain.Entities;
 using System.Globalization;
@@ -52,9 +53,13 @@ public static class Posts
 
 
         // Update Post
-        app.MapPut("api/posts/{id}", async ([FromServices] ISender mediator, Guid postId, [FromBody] PostEntity post) =>
+        app.MapPatch("api/posts/{id}", async ([FromServices] ISender mediator, [FromRoute] Guid id, [FromBody] PostPatchDto patchDto) =>
         {
-            var result = await mediator.Send(new UpdatePostCommand(postId, post));
+            var result = await mediator.Send(new PatchPostCommand
+            {
+                PostId = id,
+                PatchDto = patchDto
+            });
             return Results.Ok(result);
         });
 

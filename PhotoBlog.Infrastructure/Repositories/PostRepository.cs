@@ -33,23 +33,10 @@ public class PostRepository : IPostRepository
             .FirstOrDefaultAsync(p => p.Id == postId);
     }
 
-    public async Task<PostEntity> UpdatePostAsync(Guid postId, PostEntity entity)
+    public async Task SaveChangesAsync()
     {
-        var post = await _context.Posts.FirstOrDefaultAsync(x => x.Id == postId);
-
-        if (post is not null)
-        {
-            post.Location = entity.Location;
-            post.Date = entity.Date;
-            post.Description = entity.Description;
-
-            await _context.SaveChangesAsync();
-
-            return post;
-        }
-        return entity;
+        await _context.SaveChangesAsync();
     }
-
 
     public async Task<bool> DeletePostAsync(Guid postId)
     {
